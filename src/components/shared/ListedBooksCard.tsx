@@ -1,106 +1,73 @@
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { IBook } from "@/types/IBook";
+
+import type { IBook } from "@/types/books.type";
 
 interface IListedBooksCardProps {
   book: IBook;
 }
 
-const ListedBooksCard = ({ book }: IListedBooksCardProps) => {
+const ListedBooksCard = ({
+  book,
+}: IListedBooksCardProps) => {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div className="grid grid-cols-1 gap-6 p-5 sm:grid-cols-[180px_1fr]">
+        {/* Image */}
+        <div className="relative h-60 overflow-hidden rounded-xl bg-gray-100">
+          <Image
+            src={book.image}
+            alt={book.bookName}
+            fill
+            className="object-contain p-4"
+            sizes="180px"
+          />
+        </div>
 
-      {/* Image */}
-      <div className="relative h-72 bg-orange-50">
-        <Image
-          src={
-            book.image ||
-            "https://i.ibb.co.com/khHN7Pk/9780143454212.jpg"
-          }
-          alt={book.bookName}
-          fill
-          className="object-contain p-6"
-        />
-      </div>
-
-      {/* Card Content */}
-      <div className="space-y-3 p-5">
-
-        {/* Category */}
-        <span className="inline-block rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-600">
-          {book.category}
-        </span>
-
-        {/* Book Name */}
-        <h2 className="line-clamp-1 text-xl font-bold text-gray-900">
-          {book.bookName}
-        </h2>
-
-        {/* Author */}
-        <p className="text-sm text-gray-500">
-          By{" "}
-          <span className="font-medium text-gray-700">
-            {book.author}
+        {/* Content */}
+        <div className="flex flex-col justify-center">
+          <span className="mb-2 w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            {book.category}
           </span>
-        </p>
 
-        {/* Review */}
-        <p className="line-clamp-2 text-sm leading-6 text-gray-500">
-          {book.review}
-        </p>
+          <h2 className="text-2xl font-bold">
+            {book.bookName}
+          </h2>
 
-        {/* Rating + Pages */}
-        <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+          <p className="mt-1 text-gray-500">
+            by {book.author}
+          </p>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1">
-            <span className="text-yellow-500">
-              ★
-            </span>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm">
+            <span>⭐ {book.rating}</span>
 
-            <span className="font-semibold">
-              {book.rating}
-            </span>
+            <span>{book.totalPages} Pages</span>
 
-            <span className="text-sm text-gray-400">
-              / 5
-            </span>
+            <span>{book.yearOfPublishing}</span>
           </div>
 
-          {/* Pages */}
-          <span className="text-sm text-gray-500">
-            {book.totalPages} pages
-          </span>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {book.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-gray-100 px-3 py-1 text-xs"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
 
-        </div>
-
-        {/* Buttons */}
-        <div className="flex gap-2 pt-2">
-
-          {/* View Details */}
           <Link
             href={`/books/${book.bookId}`}
-            className="btn btn-primary flex-1 rounded-full"
+            className="btn btn-primary mt-5 w-fit"
           >
-            View Details
+            View Details →
           </Link>
-
-          {/* Save Book */}
-          <button
-            type="button"
-            className="btn btn-outline btn-primary flex-1 rounded-full"
-          >
-            Save Book
-          </button>
-
         </div>
-
       </div>
     </div>
   );
 };
 
 export default ListedBooksCard;
-

@@ -1,23 +1,44 @@
 "use client";
-import React, { ReactNode, useState } from 'react';
-import { createContext } from 'react';
 
-export const BooksContext = createContext({});
+import React, {
+  createContext,
+  ReactNode,
+  useState,
+} from "react";
 
-const BooksProvider = ({children}:{children:ReactNode}) => {
+import type { IBook } from "@/types/books.type";
 
-    const [readBooks, setReadBooks] = useState([]);
-    const [wishlist, setWishlist] = useState([]);
-    const sharedData ={
+interface BooksContextType {
+  readBooks: IBook[];
+  wishlist: IBook[];
+
+  setReadBooks: React.Dispatch<React.SetStateAction<IBook[]>>;
+  setWishlist: React.Dispatch<React.SetStateAction<IBook[]>>;
+}
+
+export const BooksContext =
+  createContext<BooksContextType | null>(null);
+
+interface BooksProviderProps {
+  children: ReactNode;
+}
+
+export const BooksProvider = ({
+  children,
+}: BooksProviderProps) => {
+  const [readBooks, setReadBooks] = useState<IBook[]>([]);
+  const [wishlist, setWishlist] = useState<IBook[]>([]);
+
+  return (
+    <BooksContext.Provider
+      value={{
         readBooks,
-        setReadBooks,
         wishlist,
-        setWishlist
-    }
-
-    return (
-        <BooksContext.Provider value={sharedData}>{children}</BooksContext.Provider>
-    );
+        setReadBooks,
+        setWishlist,
+      }}
+    >
+      {children}
+    </BooksContext.Provider>
+  );
 };
-
-export default BooksProvider;

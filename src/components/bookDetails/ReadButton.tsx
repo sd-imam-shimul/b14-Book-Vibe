@@ -1,39 +1,56 @@
-
 "use client";
 
 import React, { useContext } from "react";
+
 import { BooksContext } from "@/context/BooksContext";
-import { IBook } from "@/types/books.type";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import type { IBook } from "@/types/books.type";
 
-const ReadButton = ({ book }: { book: IBook }) => {
+interface ReadButtonProps {
+  book: IBook;
+}
 
-  const { readBooks, setReadBooks } = useContext(BooksContext);
+const ReadButton = ({ book }: ReadButtonProps) => {
+  const context = useContext(BooksContext);
 
-  const router = useRouter();
+  if (!context) {
+    throw new Error(
+      "ReadButton must be used inside BooksProvider"
+    );
+  }
 
-  const handleReadBook = () => {
-    console.log("Read book btn triggered", book);
+  const { readBooks, setReadBooks } = context;
 
-    setReadBooks([...readBooks, book]);
+  const isRead = readBooks.some(
+    (item) => item.bookId === book.bookId
+  );
 
-    toast.success(`You have read "${book.bookName}"`);
+  const handleRead = () => {
+    if (isRead) {
+      setReadBooks((previous) =>
+        previous.filter(
+          (item) => item.bookId !== book.bookId
+        )
+      );
 
-    router.push("/listed-books");
+      return;
+    }
+
+    setReadBooks((previous) => [
+      ...previous,
+      book,
+    ]);
   };
 
   return (
-    <div>
-      <button
-        className="btn btn-primary flex-1 rounded-full"
-        onClick={handleReadBook}
-      >
-        Read
-      </button>
-    </div>
+    <button
+      onClick={handleRead}
+      className={`btn ${
+        isRead ? "btn-success" : "btn-primary"
+      }`}
+    >
+      {isRead ? "✓ Read" : "Mark as Read"}
+    </button>
   );
 };
 
 export default ReadButton;
-

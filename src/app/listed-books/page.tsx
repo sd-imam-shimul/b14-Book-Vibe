@@ -1,97 +1,82 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+
 import { BooksContext } from "@/context/BooksContext";
-import Books from "../books/page";
-import BookCard from "@/components/shared/BookCard";
-import { IBook } from "@/types/books.type";
 import ListedBooksCard from "@/components/shared/ListedBooksCard";
 
 const ListedBooks = () => {
-  const { readBooks, wishlist } = useContext(BooksContext);
-  const [sortBy, setSortBy] = useState<"rating" | "pages" | "year">("rating");
+  const context = useContext(BooksContext);
 
+  if (!context) {
+    throw new Error(
+      "ListedBooks must be used inside BooksProvider"
+    );
+  }
 
-  // console.log(readBooks, "readBooks");
-  // console.log(wishlist, "wishlist");
-  // console.log(sortBy, "sortBy");
-
-  const sortBooks = (books: IBook[]) => {
-    const sortedBooks = [...books];
-    if(sortBy === "rating") {
-      sortedBooks.sort((a, b) => b.rating - a.rating);
-    } else if(sortBy === "pages") {
-      sortedBooks.sort((a, b) => b.totalPages - a.totalPages);
-    } else if(sortBy === "year") {
-      sortedBooks.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
-    }
-    return sortedBooks;
-  };
-
-  const sortedReadBooks = sortBooks(readBooks);
-  const sortedWishlist = sortBooks(wishlist);
-
-  console.log(sortedReadBooks, "sortedReadBooks");
-  console.log(sortedWishlist, "sortedWishlist");
+  const { readBooks, wishlist } = context;
 
   return (
-    <div className="container mx-auto py-[20px]">
+    <main className="container mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="mb-10 text-center">
+        <h1 className="text-4xl font-bold">
+          Listed Books
+        </h1>
 
-      <h2 className="my-4 bg-amber-100 rounded-3xl py-16 font-bold text-4xl text-center">
-        Listed Books
-      </h2>
+        <p className="mt-3 text-gray-500">
+          Manage your reading list and wishlist
+        </p>
+      </div>
 
-      <div className="text-center">
-      <select 
-      value={sortBy}
-      onChange={(e) => setSortBy(e.target.value as "rating" | "pages" | "year")}
-      defaultValue="Pick a Runtime"
-       className="select select-success ">
-  <option disabled={true}>Sort by</option>
-  <option value={"rating"}>Rating</option>
-  <option value={"pages"}>Number of pages</option>
-  <option value={"year"}>Publisher Year</option>
-</select>
-</div>
+      {/* Read Books */}
+      <section>
+        <h2 className="mb-6 text-2xl font-bold">
+          Read Books ({readBooks.length})
+        </h2>
 
-      {/* Listed books | Total Read Books: {readBooks.length} <br /> | Total Wishlist Books: {wishlist.length} */}
+        {readBooks.length === 0 ? (
+          <div className="rounded-2xl bg-base-200 p-10 text-center">
+            <p className="text-gray-500">
+              You have not added any read books yet.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {readBooks.map((book) => (
+              <ListedBooksCard
+                key={book.bookId}
+                book={book}
+              />
+            ))}
+          </div>
+        )}
+      </section>
 
-      {/* name of each tab group should be unique */}
-<div className="tabs tabs-lift">
-  <input 
-  type="radio"
-   name="my_tabs_3" 
-   className="tab" 
-  aria-label=
-{`Read Books (${readBooks.length})`} defaultChecked />
-  <div className="tab-content bg-base-100 border-base-300 p-6">{
-   sortedReadBooks.length>0? (sortedReadBooks.map((book:IBook)=>{
-       return (
-      <ListedBooksCard key={book.bookId} book={book}/>
-     )
-      //  <BookCard key={book.bookId} book={book}/>
-    })
-  )  : (<p className="text-center text-lg font-semibold text-gray-500">No books read yet.</p>)
-    }</div>
+      {/* Wishlist */}
+      <section className="mt-16">
+        <h2 className="mb-6 text-2xl font-bold">
+          Wishlist ({wishlist.length})
+        </h2>
 
-  <input 
-  type="radio"
-   name="my_tabs_3" 
-   className="tab"
-   aria-label={`Wishlist Books (${wishlist.length})`} defaultChecked />
-  <div className="tab-content bg-base-100 border-base-300 p-6">{
-    sortedWishlist.length>0? (sortedWishlist.map((book:IBook)=>{
-     return (
-      <ListedBooksCard key={book.bookId} book={book}/>
-     )
-      // <BookCard key={book.bookId} book={book}/>
-    })) : (<p className="text-center text-lg font-semibold text-gray-500">No books in wishlist.</p>)
-    }</div>
-
-  
-</div>
-
-    </div>
+        {wishlist.length === 0 ? (
+          <div className="rounded-2xl bg-base-200 p-10 text-center">
+            <p className="text-gray-500">
+              Your wishlist is empty.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {wishlist.map((book) => (
+              <ListedBooksCard
+                key={book.bookId}
+                book={book}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
   );
 };
 

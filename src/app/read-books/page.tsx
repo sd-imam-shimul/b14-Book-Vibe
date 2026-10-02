@@ -1,180 +1,105 @@
-
 "use client";
 
-import { BooksContext } from "@/context/BooksContext";
-import { IBook } from "@/types/books.type";
-import { read } from "fs";
 import React, { useContext } from "react";
+
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  LabelList,
-  Label,
-  type BarShapeProps,
-  type LabelProps,
 } from "recharts";
 
+import { BooksContext } from "@/context/BooksContext";
+
 const ReadBooks = () => {
-    const {readBooks} = useContext(BooksContext);
+  const context = useContext(BooksContext);
 
-
-
-  // Chart data
-  const data = readBooks.map((book:IBook,index:number) => {
-  return {
-    name:book.bookName,
-    uv:book.totalPages,
-    pv:index + 1,
-    amt:index + 1
+  if (!context) {
+    throw new Error(
+      "ReadBooks must be used inside BooksProvider"
+    );
   }
-})
-  
 
-  
+  const { readBooks } = context;
 
-    const colors = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "red",
-    "pink",
-    "black",
-  ];
+  const data = readBooks.map((book) => ({
+    name:
+      book.bookName.length > 12
+        ? `${book.bookName.slice(0, 12)}...`
+        : book.bookName,
 
-  // Custom shape path
-  const getPath = (
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ) => {
-    return `
-      M${x},${y + height}
-      C${x + width / 3},${y + height}
-      ${x + width / 2},${y + height / 3}
-      ${x + width / 2},${y}
-
-      C${x + width / 2},${y + height / 3}
-      ${x + (2 * width) / 3},${y + height}
-      ${x + width},${y + height}
-
-      Z
-    `;
-  };
-
-  // Custom bar
-  const TriangleBar = (props: BarShapeProps) => {
-    const {
-      x,
-      y,
-      width,
-      height,
-      index,
-    } = props;
-
-    const color =
-      colors[(index ?? 0) % colors.length];
-
-    return (
-      <path
-        d={getPath(
-          Number(x),
-          Number(y),
-          Number(width),
-          Number(height)
-        )}
-        fill={color}
-        stroke={color}
-        strokeWidth={props.isActive ? 5 : 0}
-      />
-    );
-  };
-
-  // Custom label
-  const CustomColorLabel = (
-    props: LabelProps
-  ) => {
-    const fill =
-      colors[(props.index ?? 0) % colors.length];
-
-    return (
-      <Label
-        {...props}
-        fill={fill}
-      />
-    );
-  };
+    pages: book.totalPages,
+  }));
 
   return (
-    <div className="container mx-auto my-10 px-4">
-
-      {/* Heading */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">
+    <main className="container mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="mb-10 text-center">
+        <h1 className="text-4xl font-bold">
           Read Books
         </h1>
 
-        <p className="mt-2 text-gray-500">
-          Your reading statistics
+        <p className="mt-3 text-gray-500">
+          Track the number of pages in your read books
         </p>
       </div>
 
-      {/* Chart */}
-      <div className="w-full overflow-x-auto rounded-2xl bg-base-100 p-5 shadow-lg">
+      {/* Empty State */}
+      {readBooks.length === 0 ? (
+        <div className="rounded-2xl bg-base-200 p-12 text-center">
+          <h2 className="text-2xl font-bold">
+            No Read Books Yet
+          </h2>
 
-        {readBooks.length > 0 ? 
-            <BarChart
-          style={{
-            width: "100%",
-            maxWidth: "800px",
-            height: "500px",
-            margin: "0 auto",
-          }}
-          responsive
-          data={data}
-          margin={{
-            top: 30,
-            right: 20,
-            left: 20,
-            bottom: 20,
-          }}
-        >
-          <CartesianGrid />
+          <p className="mt-2 text-gray-500">
+            Mark some books as read to see your reading
+            statistics.
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-2xl bg-base-100 p-5 shadow-lg">
+          <div className="h-[450px] w-full">
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <BarChart
+                data={data}
+                margin={{
+                  top: 30,
+                  right: 20,
+                  left: 10,
+                  bottom: 50,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis dataKey="name" />
+                <XAxis
+                  dataKey="name"
+                  angle={-20}
+                  textAnchor="end"
+                  height={70}
+                />
 
-          <YAxis width="auto" />
+                <YAxis />
 
-          <Tooltip
-            cursor={{
-              fillOpacity: 0.1,
-            }}
-          />
+                <Tooltip />
 
-          <Bar
-            dataKey="uv"
-            shape={TriangleBar}
-            activeBar
-          >
-            <LabelList
-              dataKey="uv"
-              content={CustomColorLabel}
-              position="top"
-            />
-          </Bar>
-        </BarChart>
-        : <p className="text-center font-bold text-4xl">No Read  books read yet.</p>
-    }
-
-      </div>
-    </div>
+                <Bar
+                  dataKey="pages"
+                  fill="#0088FE"
+                  radius={[8, 8, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+    </main>
   );
 };
 
 export default ReadBooks;
-

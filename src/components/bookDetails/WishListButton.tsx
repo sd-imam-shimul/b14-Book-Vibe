@@ -1,39 +1,62 @@
-
 "use client";
 
 import React, { useContext } from "react";
+
 import { BooksContext } from "@/context/BooksContext";
-import { IBook } from "@/types/books.type";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import type { IBook } from "@/types/books.type";
 
-const WishListButton = ({ book }: { book: IBook }) => {
+interface WishListButtonProps {
+  book: IBook;
+}
 
-  const {  wishlist,setWishlist } = useContext(BooksContext);
+const WishListButton = ({
+  book,
+}: WishListButtonProps) => {
+  const context = useContext(BooksContext);
 
-  const router = useRouter();
+  if (!context) {
+    throw new Error(
+      "WishListButton must be used inside BooksProvider"
+    );
+  }
 
-  const handleAddToWishlist = () => {
-    console.log("Add to wishlist btn triggered", book);
+  const { wishlist, setWishlist } = context;
 
-    setWishlist([...wishlist, book]);
+  const isWishlisted = wishlist.some(
+    (item) => item.bookId === book.bookId
+  );
 
-    toast.success(`You have added "${book.bookName}" to your wishlist`);
+  const handleWishlist = () => {
+    if (isWishlisted) {
+      setWishlist((previous) =>
+        previous.filter(
+          (item) => item.bookId !== book.bookId
+        )
+      );
 
-    router.push("/listed-books");
+      return;
+    }
+
+    setWishlist((previous) => [
+      ...previous,
+      book,
+    ]);
   };
 
   return (
-    <div>
-      <button
-        className="btn btn-primary flex-1 rounded-full"
-        onClick={() => handleAddToWishlist()}
-      >
-        Add to Wishlist
-      </button>
-    </div>
+    <button
+      onClick={handleWishlist}
+      className={`btn ${
+        isWishlisted
+          ? "btn-error"
+          : "btn-outline btn-primary"
+      }`}
+    >
+      {isWishlisted
+        ? "♥ Wishlisted"
+        : "♡ Add to Wishlist"}
+    </button>
   );
 };
 
 export default WishListButton;
-
