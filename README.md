@@ -1,36 +1,190 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Book Vibe
 
-## Getting Started
+A modern and responsive **book discovery and reading management web application** built with **Next.js, TypeScript, Tailwind CSS, and daisyUI**.
 
-First, run the development server:
+Book Vibe allows users to explore books, view detailed information, manage their reading list, and keep track of books they have read.
+
+## 🌐 Live Website
+
+🔗 **Live Demo:** https://b14-book-vibe-a8mk.vercel.app/
+
+## ✨ Features
+
+* 📚 Browse and explore a collection of books
+* 🔍 View detailed information about individual books
+* ❤️ Add books to your wishlist
+* 📖 Mark books as read
+* 📋 Manage listed books
+* 📊 View read-book statistics
+* 📱 Fully responsive design for mobile, tablet, and desktop
+* 🎨 Modern UI built with Tailwind CSS and daisyUI
+* ⚡ Fast page rendering with Next.js
+* 🖼️ Optimized images using Next.js Image
+* 🔗 Dynamic book details pages
+* ⏳ Loading UI for better user experience
+
+## 🛠️ Technologies Used
+
+* **Next.js 16**
+* **React**
+* **TypeScript**
+* **Tailwind CSS**
+* **daisyUI**
+* **Recharts**
+* **Next.js Image**
+* **Git & GitHub**
+* **Vercel**
+
+## 📂 Project Structure
+
+```text
+book-vibe/
+├── public/
+│   └── booksData.json
+│
+├── src/
+│   ├── app/
+│   │   ├── books/
+│   │   │   ├── [id]/
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   │
+│   │   ├── listed-books/
+│   │   │   └── page.tsx
+│   │   │
+│   │   ├── read-books/
+│   │   │   └── page.tsx
+│   │   │
+│   │   ├── layout.tsx
+│   │   ├── loading.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   │
+│   ├── assets/
+│   │   ├── book.ico
+│   │   └── hero_img.jpg
+│   │
+│   ├── components/
+│   │   ├── bookDetails/
+│   │   ├── homepage/
+│   │   └── shared/
+│   │
+│   ├── context/
+│   │   └── BooksContext.tsx
+│   │
+│   └── types/
+│       └── books.type.ts
+│
+├── package.json
+├── next.config.ts
+└── README.md
+```
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/sd-imam-shimul/b14-Book-Vibe.git
+```
+
+### 2. Navigate to the project
+
+```bash
+cd b14-Book-Vibe
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Build for Production
 
-## Learn More
+To create a production build:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the production server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm start
+```
 
-## Deploy on Vercel
+## 📖 Main Pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Page         | Route           |
+| ------------ | --------------- |
+| Home         | `/`             |
+| Books        | `/books`        |
+| Book Details | `/books/[id]`   |
+| Listed Books | `/listed-books` |
+| Read Books   | `/read-books`   |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 UI & Design
+
+Book Vibe uses a clean and modern interface focused on readability and easy navigation.
+
+The application includes:
+
+* Responsive navigation
+* Modern book cards
+* Book detail layouts
+* Wishlist and reading actions
+* Responsive grids
+* Reading statistics
+* Loading states
+* Responsive mobile menu
+
+## 📊 Read Books
+
+The **Read Books** section provides a visual representation of reading progress using a bar chart.
+
+The chart is built with **Recharts** and displays the number of pages associated with books in the reading list.
+
+## 🔮 Future Improvements
+
+Some possible improvements for future versions:
+
+* 🔐 User authentication
+* ☁️ Backend database integration
+* 🔎 Advanced book search
+* 🏷️ Category and tag filtering
+* 📚 Pagination
+* ⭐ User reviews and ratings
+* 🌙 Dark mode improvements
+* 👤 User profile
+* 📈 More detailed reading statistics
+
+## 👨‍💻 Author
+
+**Shimul**
+
+Aspiring Web Developer | Learning React & Next.js
+
+* GitHub: https://github.com/sd-imam-shimul
+
+## 🚀 Deployment
+
+This project is deployed with **Vercel**.
+
+**Live:** https://b14-book-vibe-a8mk.vercel.app/
+
+---
+
+⭐ If you find this project useful or interesting, consider giving it a star on GitHub.
