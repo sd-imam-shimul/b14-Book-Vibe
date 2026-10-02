@@ -4,8 +4,8 @@ import { IBook } from "@/types/IBook";
 import BookCard from "@/components/shared/BookCard";
 
 const getBooks = async (): Promise<IBook[]> => {
-  const response = await fetch(
-    "http://localhost:3000/booksData.json"
+   const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`
   );
 
   if (!response.ok) {
